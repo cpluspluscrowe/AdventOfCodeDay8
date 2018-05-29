@@ -4,6 +4,7 @@ import java.io.File
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
+var globalMax:Int = 0
 fun main(args: Array<String>) {
     val storedValues:HashMap<String, Int> = HashMap()
     val lines = File("./src/input.txt").readLines()
@@ -26,6 +27,7 @@ fun main(args: Array<String>) {
     println(storedValues)
     val maxes = getMax(storedValues)
     println(maxes.first + " " + maxes.second)
+    println(globalMax)
 }
 fun getMax(dict:HashMap<String,Int>): Pair<String,Int>{
     var max = 0
@@ -46,7 +48,11 @@ fun addValue(id:String,instruction:String,amount: Int, storedValues:HashMap<Stri
     if(!storedValues.containsKey(id)){
         throw Exception("HashMap does not contain value")
     }
-    storedValues.put(id, storedValues.getValue(id) + amountoAdd)
+    val changedValue = storedValues.getValue(id) + amountoAdd
+    if(changedValue > globalMax){
+        globalMax = changedValue
+    }
+    storedValues.put(id, changedValue)
 }
 fun getValue(variable:String, storedValues:HashMap<String,Int>): Int{
     var variableAsInt:Int
